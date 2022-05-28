@@ -1,7 +1,12 @@
 const https = require('https');
 const crypto = require('crypto');
-const accessKey = "";
-const secretKey = "";
+const dotenv = require("dotenv");
+
+dotenv.config();
+
+
+const accessKey = process.env.ACCESS_KEY;
+const secretKey = process.env.SECRET_KEY;
 const log = false;
 
 async function makeRequest(method, urlPath, body = null) {
@@ -14,6 +19,8 @@ async function makeRequest(method, urlPath, body = null) {
         idempotency = new Date().getTime().toString();
         timestamp = Math.round(new Date().getTime() / 1000);
         signature = sign(httpMethod, httpURLPath, salt, timestamp, body)
+
+        console.log(salt,idempotency,timestamp,accessKey,signature);
 
         const options = {
             hostname: httpBaseURL,
@@ -33,7 +40,7 @@ async function makeRequest(method, urlPath, body = null) {
         return await httpRequest(options, body, log);
     }
     catch (error) {
-        console.error("Error generating request options");
+        console.error("Error generating request options",error);
         throw error;
     }
 }
