@@ -29,7 +29,7 @@
  app.get('/country', async (req, res) => {
  
      try {
-         const result = await makeRequest('GET', '/v1/payment_methods/country?country=it');
+         const result = await makeRequest('GET', '/v1/payment_methods/country?country=IN');
      
          res.json(result);
        } catch (error) {
@@ -38,35 +38,42 @@
  
  })
  
- app.get('/country', async (req, res) => {
+//  app.get('/country', async (req, res) => {
  
-     try {
-         const result = await makeRequest('GET', '/v1/payment_methods/country?country=it');
+//      try {
+//          const result = await makeRequest('GET', '/v1/payment_methods/country?country=it');
      
-         res.json(result);
-       } catch (error) {
-         res.json(error);
-       }
+//          res.json(result);
+//        } catch (error) {
+//          res.json(error);
+//        }
  
- })
+//  })
  
- app.get('/checkout', async (req, res) => {
+ app.post('/checkout', async (req, res) => {
  
+    console.log(req.body);
+    
      try {
          const body = {
-             "amount": 100,
-             "complete_payment_url": "http://example.com/complete",
-             "country": "SG",
-             "currency": "SGD",
-             "error_payment_url": "http://example.com/error",
+             "amount":req.body.amount,
+            //  "complete_payment_url": "http://example.com/complete",
+             "country": "IN",
+             "currency": "INR",
+            //  "error_payment_url": "http://example.com/error",
              "merchant_reference_id": "0912-2021",
              "language": "en",
              "metadata": {
                  "merchant_defined": true
              },
              "payment_method_types_include": [
-                 "sg_grabpay_ewallet"
-             ]
+                "in_paytm_ewallet",
+                "in_upi_bank",
+                "in_googlepay_upi_bank",
+                "in_pnbcorp_bank",
+                "in_mastercard_credit_card",
+                "in_debit_visa_card"
+            ],
          }
  
          const result = await makeRequest('POST', '/v1/checkout', body);
